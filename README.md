@@ -27,7 +27,7 @@ O grafo apresentado foi construído com base no mapa urbano da região de Marab�
 
 ![Grafo Gerado](Dijkstra/grafo_transporte_maraba.png)
 
-### ♦️ Algoritmo (Dijkstra)
+### ♦️ Algoritmo ([Dijkstra](Dijkstra/main.py))
 O algoritmo de Dijkstra é utilizado para determinar o trajeto mais curto em grafos cujas arestas possuem pesos positivos ou nulos. Por isso, ele é bastante eficiente em aplicações como sistemas de transporte, onde tempo e distância não podem ser negativos. Além disso, ele se destaca pelo bom desempenho ao lidar com grafos de grande porte e com muitas conexões.
 
 **1. Importando as bibliotecas**
@@ -248,7 +248,7 @@ executar()
 ```
 Essa é a função que integra tudo. Primeiro, exibe o grafo visualmente. Depois calcula e mostra a rota total entre 'Transmangueira' e 'C2' passando por todos os pontos. Permite que o usuário consulte rotas entre pontos específicos e, por fim, oferece a opção de bloquear um ponto e calcular uma rota alternativa.
 
-### ♦️ Algoritmo (Bellman-Ford)
+### ♦️ Algoritmo ([Bellman-Ford](Bellmanford/main.py))
 O algoritmo de Bellman-Ford se destaca por aceitar arestas com pesos negativos, o que o torna útil em cenários onde há penalidades de custo, como em horários de pico ou quando é preciso considerar rotas alternativas.
 
 **1. Importando as bibliotecas**
