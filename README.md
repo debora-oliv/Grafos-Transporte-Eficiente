@@ -93,44 +93,6 @@ ddef dijkstra(grafo, inicio, fim):
 ```
 Esta função implementa o algoritmo de Dijkstra, que busca o caminho mais curto entre dois pontos no grafo. Ela usa uma fila de prioridade para explorar os caminhos de menor custo primeiro, acumulando os pesos das conexões. Retorna o custo total e o percurso encontrado.
 
-**5. Criando rota 'Transmangueira' -> 'C2'**
-```python
-def rota_total(grafo):
-    pontos = list(grafo.keys())
-    if not pontos:
-        return 0, []
-
-    trajeto = [pontos[0]]
-    tempo_total = 0
-    pontos_visitados = set(trajeto)
-    ponto_atual = pontos[0]
-
-    while len(pontos_visitados) < len(pontos):
-        menor_custo = float('inf')
-        proximo_ponto = None
-        melhor_caminho = []
-
-        for ponto in pontos:
-            if ponto in pontos_visitados:
-                continue
-            custo, caminho = dijkstra(grafo, ponto_atual, ponto)
-            if custo < menor_custo:
-                menor_custo = custo
-                proximo_ponto = ponto
-                melhor_caminho = caminho
-        
-        if proximo_ponto is None: # Não há mais pontos alcançáveis
-            break
-        
-        trajeto.extend(melhor_caminho[1:])
-        tempo_total += menor_custo
-        ponto_atual = proximo_ponto
-        pontos_visitados.add(ponto_atual)
-        
-    return tempo_total, trajeto
-```
-Esta função monta uma rota que começa em 'Morada Nova' e termina em 'C3', passando por todos os outros pontos do grafo. Para isso, a cada passo, escolhe o próximo ponto mais próximo ainda não visitado, usando Dijkstra para calcular o menor caminho entre o ponto atual e os pontos restantes.
-
 **6. Implementando PageRank**
 ```python
 def pagerank(grafo):
