@@ -74,52 +74,60 @@ Aqui é definido o grafo que representa a rede de pontos e conexões do sistema.
 
 **4. Implementando o algoritmo**
 ```python
-def dijkstra(grafo, inicio, fim):
-    fila = [(0, inicio, [])]
+ddef dijkstra(grafo, inicio, fim):
+    heap = [(0, inicio, [])]
     visitados = set()
-    while fila:
-        custo, atual, percurso = heapq.heappop(fila)
+
+    while heap:
+        (custo, atual, caminho) = heapq.heappop(heap)
         if atual in visitados:
             continue
-        percurso = percurso + [atual]
-        if atual == fim:
-            return custo, percurso
         visitados.add(atual)
-        for vizinho, peso in grafo[atual].items():
+        caminho = caminho + [atual]
+        if atual == fim:
+            return custo, caminho
+        for vizinho, peso in grafo.get(atual, {}).items():
             if vizinho not in visitados:
-                heapq.heappush(fila, (custo + peso, vizinho, percurso))
-    return float("inf"), []
+                heapq.heappush(heap, (custo + peso, vizinho, caminho))
+    return float('inf'), []
 ```
 Esta função implementa o algoritmo de Dijkstra, que busca o caminho mais curto entre dois pontos no grafo. Ela usa uma fila de prioridade para explorar os caminhos de menor custo primeiro, acumulando os pesos das conexões. Retorna o custo total e o percurso encontrado.
 
 **5. Criando rota 'Transmangueira' -> 'C2'**
 ```python
 def rota_total(grafo):
-    origem = 'Transmangueira'
-    destino = 'C2'
-    restantes = list(grafo.keys())
-    rota = [origem]
-    total = 0
-    atual = origem
-    restantes.remove(origem)
+    pontos = list(grafo.keys())
+    if not pontos:
+        return 0, []
 
-    while restantes:
-        menor = float('inf')
-        proximo = None
-        trecho = []
-        for ponto in restantes:
-            custo, trajeto = dijkstra(grafo, atual, ponto)
-            if custo < menor:
-                menor = custo
-                proximo = ponto
-                trecho = trajeto
-        for local in trecho[1:]:
-            if local not in rota:
-                rota.append(local)
-        total += menor
-        atual = proximo
-        restantes.remove(proximo)
-    return total, rota
+    trajeto = [pontos[0]]
+    tempo_total = 0
+    pontos_visitados = set(trajeto)
+    ponto_atual = pontos[0]
+
+    while len(pontos_visitados) < len(pontos):
+        menor_custo = float('inf')
+        proximo_ponto = None
+        melhor_caminho = []
+
+        for ponto in pontos:
+            if ponto in pontos_visitados:
+                continue
+            custo, caminho = dijkstra(grafo, ponto_atual, ponto)
+            if custo < menor_custo:
+                menor_custo = custo
+                proximo_ponto = ponto
+                melhor_caminho = caminho
+        
+        if proximo_ponto is None: # Não há mais pontos alcançáveis
+            break
+        
+        trajeto.extend(melhor_caminho[1:])
+        tempo_total += menor_custo
+        ponto_atual = proximo_ponto
+        pontos_visitados.add(ponto_atual)
+        
+    return tempo_total, trajeto
 ```
 Esta função monta uma rota que começa em 'Morada Nova' e termina em 'C3', passando por todos os outros pontos do grafo. Para isso, a cada passo, escolhe o próximo ponto mais próximo ainda não visitado, usando Dijkstra para calcular o menor caminho entre o ponto atual e os pontos restantes.
 
@@ -138,36 +146,37 @@ Aqui convertemos o dicionário em um grafo direcionado do NetworkX para calcular
 ```python
 def rota_entre_pontos(grafo, inicio, fim):
     tempo, trajeto = dijkstra(grafo, inicio, fim)
-    print(f"\nTrajeto entre {inicio} e {fim}:")
-    for local in trajeto:
-        print(f"- {local}")
     print(f"Tempo estimado: {tempo_formatado(tempo)}")
-
     ranking = pagerank(grafo)
     print("\nImportância dos pontos (PageRank):")
     for ponto, valor in sorted(ranking.items(), key=lambda x: x[1], reverse=True):
-        print(f"- {ponto}: importância {valor:.4f}")
+        print(f"- {ponto}: importância {valor:.4f}")  
 ```
 Permite que o usuário informe um ponto de início e fim para saber a rota mais curta e o tempo estimado entre eles. Além disso, exibe a importância dos pontos usando o PageRank para dar contexto sobre a relevância dos pontos na rede.
 
 **8. Simulando bloqueios**
 ```python
 def rota_com_bloqueio(grafo, caminho, bloqueios):
-    novo = deepcopy(grafo)
+    def rota_com_bloqueio(grafo, caminho, bloqueios):
+    novo_grafo = deepcopy(grafo)
+    
     for a, b in bloqueios:
-        novo[a].pop(b, None)
-        novo[b].pop(a, None)
+        if a in novo_grafo and b in novo_grafo[a]:
+            novo_grafo[a].pop(b, None)
+        if b in novo_grafo and a in novo_grafo[b]:
+            novo_grafo[b].pop(a, None)
 
     nova_rota = []
     total = 0
     for i in range(len(caminho) - 1):
         a, b = caminho[i], caminho[i+1]
-        custo, trajeto = dijkstra(novo, a, b)
+        custo, trajeto = dijkstra(novo_grafo, a, b)
         if custo == float('inf'):
             print(f"Bloqueio entre {a} e {b}, sem rota alternativa.")
             return None, None
         nova_rota.extend(trajeto[1:])
         total += custo
+    
     return total, nova_rota
 ```
 Esta função simula bloqueios em certas conexões (arestas do grafo). Ela remove as conexões bloqueadas e tenta encontrar rotas alternativas entre os pontos do caminho original. Se não for possível, indica que não há rota alternativa.
@@ -205,26 +214,57 @@ Aqui, o usuário pode escolher bloquear um ponto inteiro (parada, estação etc)
 
 **10. Criando representação gráfica do grafo**
 ```python
-def plotar_grafo(grafo):
+def plotar_grafo(grafo, titulo="Rede de pontos do transporte público", 
+                   pontos_destaque=None, cor_pontos_destaque="red",
+                   arestas_destaque=None, cor_arestas_destaque="red"):
     G = nx.DiGraph()
     for origem, destinos in grafo.items():
         for destino, peso in destinos.items():
             G.add_edge(origem, destino, weight=peso)
-
+    
     pos = nx.spring_layout(G, seed=42)
-    labels = nx.get_edge_attributes(G, 'weight')
+    
+    node_colors = ["skyblue"] * len(G.nodes())
+    if pontos_destaque:
+        node_colors = [cor_pontos_destaque if node in pontos_destaque else "skyblue" for node in G.nodes()]
 
-    plt.figure(figsize=(12, 8))
-    nx.draw(G, pos, with_labels=True, node_color='skyblue', node_size=1500,
-            font_size=10, font_weight='bold', arrows=True, arrowsize=20)
-    nx.draw_networkx_edge_labels(G, pos, edge_labels=labels, font_size=9)
-    plt.title("Visualização do Grafo de Conexões")
+    nx.draw_networkx_nodes(G, pos, node_color=node_colors, node_size=1000)
+
+    nx.draw_networkx_edges(G, pos, edge_color="gray", width=1.0, alpha=0.7)
+
+    if arestas_destaque:
+        nx.draw_networkx_edges(G, pos, edgelist=arestas_destaque, edge_color=cor_arestas_destaque, width=2.0)
+    
+    nx.draw_networkx_labels(G, pos, font_size=8)
+    
+    labels = nx.get_edge_attributes(G, 'weight')
+    nx.draw_networkx_edge_labels(G, pos, edge_labels=labels, font_size=6)
+    
+    plt.title(titulo)
     plt.tight_layout()
     plt.show()
 ```
 Essa função cria uma representação gráfica do grafo usando o networkx e matplotlib. Ela posiciona os nós automaticamente, desenha as conexões com seus pesos (distâncias) e exibe essa visualização para facilitar a compreensão da rede.
 
-**11. Integrando tudo**
+**11. Recalculando a rota**
+```
+def rota_recalculada(grafo_modificado, caminho_original):
+    nova_rota = []
+    total = 0
+
+    custo, trajeto = dijkstra(grafo_modificado, caminho_original[0], caminho_original[1])
+    
+    if custo == float('inf'):
+        print(f"Não foi possível encontrar uma rota alternativa entre {caminho_original[0]} e {caminho_original[1]}.")
+        return None, None
+    
+    nova_rota.extend(trajeto)
+    total += custo
+    
+    return total, nova_rota
+```
+
+**12. Executando tudo**
 ```python
 def executar():
     print("== Caminho completo de Transmangueira até C2 ==")
