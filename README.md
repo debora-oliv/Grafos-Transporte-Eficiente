@@ -51,18 +51,21 @@ Essa função converte um tempo dado em minutos para uma string legível, mostra
 
 **3. Definindo o grafo**
 ```python
-graph = {
-    'Bela Vista': {'Uepa': 5},
-    'Uepa': {'FL33': 7, 'Bambuzal': 5, 'Bela Vista': 5},
-    'FL33': {'Uepa': 7, 'C1': 6, 'C2': 10, 'C3': 16, 'Bambuzal': 6, 'FL26': 4, 'São Félix': 19},
-    'C1': {'C3': 13, 'C2': 6, 'São Félix': 15, 'FL26': 3, 'FL33': 6},
-    'C2': {'FL33': 10, 'C1': 6, 'São Félix': 10, 'FL26': 7, 'Transmangueira': 10},
-    'Bambuzal': {'FL33': 6, 'Uepa': 10, 'FL26': 4, 'Transmangueira': 4},
-    'Transmangueira': {'FL26': 9, 'C2': 11, 'Bambuzal': 8},
-    'FL26': {'FL33': 4, 'C2': 9, 'Transmangueira': 9, 'Bambuzal': 6, 'C1': 3},
-    'C3': {'C2': 17, 'C1': 13, 'FL33': 16},
-    'São Félix': {'C1': 15, 'C2': 10, 'FL26': 17, 'FL33': 19, 'Morada Nova': 15},
-    'Morada Nova': {'São Félix': 15}
+mapa = {
+    'Bela Vista': {'Uepa': 5, 'Cidade Nova': 6},
+    'Uepa': {'FL33': 7, 'Bambuzal': 5, 'Bela Vista': 5, 'Cidade Nova': 4},
+    'FL33': {'Uepa': 7, 'C1': 6, 'C2': 10, 'C3': 16, 'Bambuzal': 6, 'Verdes Mares': 4, 'São Félix': 19, 'Cidade Nova': 9, 'Shopping': 5},
+    'C1': {'C3': 13, 'C2': 6, 'São Félix': 15, 'Verdes Mares': 3, 'FL33': 6, 'Shopping': 6},
+    'C2': {'FL33': 10, 'C1': 6, 'São Félix': 10, 'Verdes Mares': 7, 'Transmangueira': 10},
+    'Bambuzal': {'FL33': 6, 'Uepa': 10, 'Verdes Mares': 4, 'Transmangueira': 4},
+    'Transmangueira': {'Verdes Mares': 9, 'C2': 11, 'Bambuzal': 8},
+    'Verdes Mares': {'FL33': 4, 'C2': 9, 'Transmangueira': 9, 'Bambuzal': 6, 'C1': 3},
+    'C3': {'C2': 17, 'C1': 13, 'FL33': 16, 'Cidade Jardim': 10},
+    'São Félix': {'C1': 15, 'C2': 10, 'Verdes Mares': 17, 'FL33': 19, 'Morada Nova': 15},
+    'Morada Nova': {'São Félix': 15},
+    'Cidade Jardim': {'C3': 10, 'Shopping': 7},
+    'Shopping': {'Cidade Jardim': 7, 'C1': 6, 'FL33': 5},
+    'Cidade Nova': {'Bela Vista': 6, 'Uepa': 4, 'FL33': 9}
 }
 ```
 Aqui é definido o grafo que representa a rede de pontos e conexões do sistema. Cada chave é um ponto de parada e seu valor é um dicionário com pontos vizinhos e o peso da conexão (que representa tempo). Este grafo serve de base para o cálculo de rotas.
@@ -87,7 +90,7 @@ def dijkstra(grafo, inicio, fim):
 ```
 Esta função implementa o algoritmo de Dijkstra, que busca o caminho mais curto entre dois pontos no grafo. Ela usa uma fila de prioridade para explorar os caminhos de menor custo primeiro, acumulando os pesos das conexões. Retorna o custo total e o percurso encontrado.
 
-**5. Criando rota 'Morada Nova' -> 'C3'**
+**5. Criando rota 'Transmangueira' -> 'C2'**
 ```python
 def rota_total(grafo):
     origem = 'Transmangueira'
@@ -241,7 +244,7 @@ def executar():
 
 executar()
 ```
-Essa é a função que integra tudo. Primeiro, exibe o grafo visualmente. Depois calcula e mostra a rota total entre 'Morada Nova' e 'C3' passando por todos os pontos. Permite que o usuário consulte rotas entre pontos específicos e, por fim, oferece a opção de bloquear um ponto e calcular uma rota alternativa.
+Essa é a função que integra tudo. Primeiro, exibe o grafo visualmente. Depois calcula e mostra a rota total entre 'Transmangueira' e 'C2' passando por todos os pontos. Permite que o usuário consulte rotas entre pontos específicos e, por fim, oferece a opção de bloquear um ponto e calcular uma rota alternativa.
 
 ### ♦️ Algoritmo (Bellman-Ford)
 O algoritmo de Bellman-Ford se destaca por aceitar arestas com pesos negativos, o que o torna útil em cenários onde há penalidades de custo, como em horários de pico ou quando é preciso considerar rotas alternativas.
