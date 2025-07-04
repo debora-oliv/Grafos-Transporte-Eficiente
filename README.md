@@ -25,6 +25,8 @@ Para atingir o resultado desejado foi modelado o sistema de transporte público 
 ### Modelagem do grafo
 O grafo apresentado foi construído com base no mapa urbano da região de Marabá-PA, considerando pontos estratégicos que representam bairros e polos educacionais importantes. Nele, destacam-se localidades como Morada Nova, São Félix, os três campi da Unifesspa (C1, C2 e C3), as folhas 26 e 33 da Nova Marabá, além de áreas centrais como a Transmangueira, Bambuzal, UEPA e a Avenida Bela Vista. As conexões entre os nós simbolizam rotas de deslocamento entre esses pontos, com pesos representando distâncias ou tempos estimados de trajeto, o que permite a aplicação de algoritmos de otimização para melhorar o transporte público local.
 
+![Grafo Gerado](Dijkstra/grafo_transporte_maraba.PNG)
+
 ### ♦️ Algoritmo (Dijkstra)
 O algoritmo de Dijkstra é utilizado para determinar o trajeto mais curto em grafos cujas arestas possuem pesos positivos ou nulos. Por isso, ele é bastante eficiente em aplicações como sistemas de transporte, onde tempo e distância não podem ser negativos. Além disso, ele se destaca pelo bom desempenho ao lidar com grafos de grande porte e com muitas conexões.
 
