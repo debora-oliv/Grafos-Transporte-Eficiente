@@ -22,16 +22,10 @@ Considerar um cenário onde uma rota importante é temporariamente interrompida 
 # Metodologia e desenvolvimento 
 Para atingir o resultado desejado foi modelado o sistema de transporte público como um grafo, onde os pontos de ônibus são representados como vértices e as rotas possíveis entre eles como arestas, com pesos que refletem o tempo de viagem ou a distância.
 
-### Modelagem do grafo
+## Modelagem do grafo
 O grafo apresentado foi construído com base no mapa urbano da região de Marabá-PA, considerando pontos estratégicos que representam bairros e polos educacionais importantes. Nele, destacam-se localidades como Morada Nova, São Félix, os três campi da Unifesspa (C1, C2 e C3), as folhas 26 e 33 da Nova Marabá, além de áreas centrais como a Transmangueira, Bambuzal, UEPA e a Avenida Bela Vista. As conexões entre os nós simbolizam rotas de deslocamento entre esses pontos, com pesos representando distâncias ou tempos estimados de trajeto, o que permite a aplicação de algoritmos de otimização para melhorar o transporte público local.
 
 ![Grafo Gerado](Dijkstra/grafo_transporte_maraba.png)
-
-### ♦️ Algoritmo ([Dijkstra](Dijkstra/main.py))
-O algoritmo de Dijkstra é utilizado para determinar o trajeto mais curto em grafos cujas arestas possuem pesos positivos ou nulos. Por isso, ele é bastante eficiente em aplicações como sistemas de transporte, onde tempo e distância não podem ser negativos. Além disso, ele se destaca pelo bom desempenho ao lidar com grafos de grande porte e com muitas conexões.
-
-### ♦️ Algoritmo ([Bellman-Ford](Bellmanford/main.py))
-O algoritmo de Bellman-Ford se destaca por aceitar arestas com pesos negativos, o que o torna útil em cenários onde há penalidades de custo, como em horários de pico ou quando é preciso considerar rotas alternativas.
 
 # Comparação dos Algoritmos
 Tanto Dijkstra quanto Bellman-Ford têm o objetivo de achar o caminho mais curto dentro de uma rede (ou grafo, no linguajar da computação). Mas cada um tem suas particularidades, vantagens e limitações dependendo do cenário.
