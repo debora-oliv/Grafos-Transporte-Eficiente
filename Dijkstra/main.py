@@ -166,5 +166,8 @@ def executar():
     rota_entre_pontos(mapa, entrada, saida)
 
     remover_ponto(mapa)
+    
+    input("\nPressione Enter duas vezes para encerrar.")
+    input()
 
 executar()

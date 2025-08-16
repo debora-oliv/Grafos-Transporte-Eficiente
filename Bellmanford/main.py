@@ -11,17 +11,20 @@ def formatar_tempo(minutos):
         return f"{minutos_restantes}min"
 
 graph = {
-    'Bela Vista': {'Uepa': 5},
-    'Uepa': {'FL33': 7, 'Bambuzal': 5, 'Bela Vista': 5},
-    'FL33': {'Uepa': 7, 'C1': 6, 'C2': 10, 'C3': 16, 'Bambuzal': 6, 'FL26': 4, 'São Félix': 19},
-    'C1': {'C3': 13, 'C2': 6, 'São Félix': 15, 'FL26': 3, 'FL33': 6},
-    'C2': {'FL33': 10, 'C1': 6, 'São Félix': 10, 'FL26': 7, 'Transmangueira': 10},
-    'Bambuzal': {'FL33': 6, 'Uepa': 10, 'FL26': 4, 'Transmangueira': 4},
-    'Transmangueira': {'FL26': 9, 'C2': 11, 'Bambuzal': 8},
-    'FL26': {'FL33': 4, 'C2': 9, 'Transmangueira': 9, 'Bambuzal': 6, 'C1': 3, 'São Félix': 17},
-    'C3': {'C2': 17, 'C1': 13, 'FL33': 16},
-    'São Félix': {'C1': 15, 'C2': 10, 'FL26': 17, 'FL33': 19, 'Morada Nova': 15},
-    'Morada Nova': {'São Félix': 15}
+    'Bela Vista': {'Uepa': 5, 'Cidade Nova': 6},
+    'Uepa': {'FL33': 7, 'Bambuzal': 5, 'Bela Vista': 5, 'Cidade Nova': 4},
+    'FL33': {'Uepa': 7, 'C1': 6, 'C2': 10, 'C3': 16, 'Bambuzal': 6, 'Verdes Mares': 4, 'São Félix': 19, 'Cidade Nova': 9, 'Shopping': 5},
+    'C1': {'C3': 13, 'C2': 6, 'São Félix': 15, 'Verdes Mares': 3, 'FL33': 6, 'Shopping': 6},
+    'C2': {'FL33': 10, 'C1': 6, 'São Félix': 10, 'Verdes Mares': 7, 'Transmangueira': 10},
+    'Bambuzal': {'FL33': 6, 'Uepa': 10, 'Verdes Mares': 4, 'Transmangueira': 4},
+    'Transmangueira': {'Verdes Mares': 9, 'C2': 11, 'Bambuzal': 8},
+    'Verdes Mares': {'FL33': 4, 'C2': 9, 'Transmangueira': 9, 'Bambuzal': 6, 'C1': 3},
+    'C3': {'C2': 17, 'C1': 13, 'FL33': 16, 'Cidade Jardim': 10},
+    'São Félix': {'C1': 15, 'C2': 10, 'Verdes Mares': 17, 'FL33': 19, 'Morada Nova': 15},
+    'Morada Nova': {'São Félix': 15},
+    'Cidade Jardim': {'C3': 10, 'Shopping': 7},
+    'Shopping': {'Cidade Jardim': 7, 'C1': 6, 'FL33': 5},
+    'Cidade Nova': {'Bela Vista': 6, 'Uepa': 4, 'FL33': 9}
 }
 
 def plot_grafo(graph):
@@ -29,11 +32,12 @@ def plot_grafo(graph):
     for node, edges in graph.items():
         for neighbor, weight in edges.items():
             G.add_edge(node, neighbor, weight=weight)
-    pos = nx.spring_layout(G)
-    plt.figure(figsize=(10, 8))
-    nx.draw(G, pos, with_labels=True, node_size=1000, node_color="lightblue", font_size=10, font_weight="bold", arrows=True)
+    pos = nx.spring_layout(G, seed=42)
+    plt.figure(figsize=(12, 8))
+    nx.draw(G, pos, with_labels=True, node_size=1500, node_color="lightblue",
+            font_size=10, font_weight="bold", arrows=True, arrowsize=20)
     edge_labels = nx.get_edge_attributes(G, 'weight')
-    nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels)
+    nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_size=9)
     plt.title("Grafo com seus respectivos pesos")
     plt.show()
 
@@ -179,5 +183,7 @@ def interagir_com_usuario_e_calcular_rota_sem_bloqueio(graph):
         else:
             print(f"\nO tempo estimado de viagem de {ponto_inicial} a {ponto_final} é: {formatar_tempo(tempo_viagem)}.")
             print(f"O caminho percorrido será: {' -> '.join(caminho_rota)}")
+    input("\nPressione Enter duas vezes para encerrar.")
+    input()
 
 interagir_com_usuario_e_calcular_rota_sem_bloqueio(graph)
