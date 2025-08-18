@@ -22,7 +22,7 @@ Considerar um cenário onde uma rota importante é temporariamente interrompida 
 # Metodologia e desenvolvimento 
 Para atingir o resultado desejado foi modelado o sistema de transporte público como um grafo, onde os pontos de ônibus são representados como vértices e as rotas possíveis entre eles como arestas, com pesos (calculados por meio do algortimo de PageRank) que refletem o tempo de viagem ou a distância.
 
-![Grafo Gerado](Dijkstra/grafo_transporte_maraba.png)
+![Grafo Gerado](grafo_transporte_maraba.png)
 
 O grafo foi construído com base no mapa urbano da região de Marabá-PA, considerando pontos estratégicos que representam bairros e polos importantes. Nele, destacam-se localidades como Morada Nova, São Félix, os três campi da Unifesspa (C1, C2 e C3), as folhas 26 e 33 da Nova Marabá, além de áreas centrais como a Transmangueira, Bambuzal, UEPA e a Avenida Bela Vista. As conexões entre os nós simbolizam rotas de deslocamento entre esses pontos, com pesos representando o tempo estimados de trajeto, o que permite a aplicação de algoritmos de otimização (Dijkstra e Bellman-Ford) para melhorar o transporte público local.
 
