@@ -57,7 +57,7 @@ def plotar_grafo(G, pos, caminho=None, titulo=""):
             G, pos,
             arrows=True,
             arrowsize=20,
-            edge_color="gray",
+            edge_color="#574F5F",
             node_size=tamanho_no
         )
         nx.draw_networkx_edge_labels(G, pos, edge_labels=labels_arestas, font_size=9)

@@ -35,13 +35,28 @@ def iniciar_simulacao_rota(G, pos):
     """
     Coordena a simulação de rota, pedindo origem e destino ao usuário.
     """
-    print("\n--- Simulação de Rota Mais Curta ---")
+    
+    print('\n' + '/'*50)
+    print("\n-------- Simulação de Rota Mais Curta --------")
     nos_disponiveis = list(G.nodes)
-    print(f"Pontos disponíveis: {', '.join(nos_disponiveis)}")
+    print(f"\nPontos disponíveis: {', '.join(nos_disponiveis)}")
+    print("-"*76)
+    print("Digite 'ocultar' a qualquer momento para desativar/ativar exibição do grafo.")
+    print("-"*76 + "\n")
+    
+    mostrar_grafo = True
 
     while True:
         origem = input("Digite o ponto de partida (ou 'voltar' para o menu): ")
         if origem == 'voltar': return
+        if origem == 'ocultar':
+            if mostrar_grafo:
+                mostrar_grafo = False
+                print("--- !! Visualização OFF !! ---")
+            else:
+                mostrar_grafo = True
+                print("--- Visualização ON ---")
+            continue
         if origem in nos_disponiveis:
             break
         print("[ERRO] Ponto de partida inválido. Tente novamente.")
@@ -49,17 +64,27 @@ def iniciar_simulacao_rota(G, pos):
     while True:
         destino = input("Digite o ponto de destino (ou 'voltar' para o menu): ")
         if destino == 'voltar': return
+        if destino == 'ocultar':
+            if mostrar_grafo:
+                mostrar_grafo = False
+                print("--- !! Visualização OFF !! ---")
+            else:
+                mostrar_grafo = True
+                print("--- Visualização ON ---")
+            continue
         if destino in nos_disponiveis:
             break
         print("[ERRO] Ponto de destino inválido. Tente novamente.")
 
-    # Usaremos Dijkstra como exemplo de algoritmo
+    # Usaremos Dijkstra
     caminho, custo = dijkstra(mapa, origem, destino)
 
     if caminho:
         print(f"\nCaminho mais curto: {' -> '.join(caminho)}")
         print(f"Duração total: {custo} minutos")
-        plotar_grafo(G, pos, caminho=caminho, titulo=f"Rota Mais Rápida: de {origem} para {destino}")
+        if mostrar_grafo:
+            plotar_grafo(G, pos, caminho=caminho, titulo=f"Rota Mais Rápida: de {origem} para {destino}")
+        print('\n' + '/'*50)
     else:
         print(f"Não foi possível encontrar um caminho de {origem} para {destino}.")
 
