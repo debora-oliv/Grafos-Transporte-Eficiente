@@ -40,6 +40,7 @@ def plot_grafo(graph):
     nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_size=9)
     plt.title("Grafo com seus respectivos pesos")
     plt.show()
+    plt.tight_layout()
 
 def bellman_ford(graph, start, end):
     dist = {node: float('inf') for node in graph}
@@ -108,6 +109,7 @@ def remover_bloqueios(graph, bloqueios_afetados):
 
 start_node = 'Morada Nova'
 tempo_total, rota_completa = rota_todos_os_pontos(graph, start_node)
+print("BELLMAN-FORD\n")
 print(f"Rota completa original passando por todos os pontos, começando em {start_node}:\n")
 print("O ônibus passará pelos seguintes pontos:")
 for ponto in rota_completa:

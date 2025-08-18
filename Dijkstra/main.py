@@ -37,8 +37,10 @@ def dijkstra(grafo, inicio, fim):
                 heapq.heappush(fila, (custo + peso, vizinho, percurso))
     return float("inf"), []
 
+# Planeja uma rota que percorre TODOS OS PONTOS
+# a partir do ponto Transmangueira
 def rota_total(grafo):
-    origem = 'Transmangueira'
+    origem = 'Transmangueira' #PODERÍAMOS USAR MORADA NOVA AQUI
     restantes = list(grafo.keys())
     rota = [origem]
     total = 0
@@ -146,7 +148,6 @@ def plotar_grafo(grafo):
             font_size=10, font_weight='bold', arrows=True, arrowsize=20)
     nx.draw_networkx_edge_labels(G, pos, edge_labels=labels, font_size=9)
     plt.title("Visualização do Grafo de Conexões")
-    plt.tight_layout()
     plt.show()
 
 def executar():
