@@ -137,7 +137,7 @@ def main():
             iniciar_simulacao_rota(G, pos)
 
         elif escolha == 3:
-            analisar_pagerank(G, None)
+            analisar_pagerank(G, pos)
 
         elif escolha == 4:
             print("\nObrigado por usar o sistema. Até logo!")

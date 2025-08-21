@@ -48,6 +48,7 @@ def plotar_grafo(G, pos, caminho=None, titulo=""):
     plt.title(titulo, fontweight="bold", fontsize="x-large")
     plt.tight_layout()
     plt.margins(0.05)
+    plt.savefig("grafo.png")
     plt.show()
 
  # MELHORIA: Função para plotar o grafo com PageRank
