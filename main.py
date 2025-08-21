@@ -1,16 +1,13 @@
 # main.py
 
 from modelo_grafo import mapa, criar_grafo
-from algoritmos import dijkstra, pagerank, bellman_ford # Apenas Dijkstra é suficiente para o exemplo
-from plotagem import plotar_grafo
+from algoritmos import dijkstra, pagerank
+from plotagem import plotar_grafo, plotar_grafo_pagerank
 import networkx as nx
 
 def exibir_menu_principal():
     """
-    Exibe o menu principal para o usuário, valida a entrada e retorna a opção escolhida.
-
-    Returns:
-        int: O número da opção escolhida pelo usuário (1 a 4).
+    Returns: número da opção escolhida pelo usuário (1 a 4).
     """
     
     while True:
@@ -25,7 +22,7 @@ def exibir_menu_principal():
         if escolha.isdigit():
             escolha_int = int(escolha)
             if 1 <= escolha_int <= 4:
-                return escolha_int # Retorna a escolha válida e sai da função
+                return escolha_int 
             else:
                 print("\n[ERRO] Opção inválida. Por favor, escolha um número entre 1 e 4.")
         else:
@@ -38,7 +35,9 @@ def iniciar_simulacao_rota(G, pos):
     
     print('\n' + '/'*50)
     print("\n-------- Simulação de Rota Mais Curta --------")
+
     nos_disponiveis = list(G.nodes)
+
     print(f"\nPontos disponíveis: {', '.join(nos_disponiveis)}")
     print("-"*76)
     print("Digite 'ocultar' a qualquer momento para desativar/ativar exibição do grafo.")
@@ -76,7 +75,7 @@ def iniciar_simulacao_rota(G, pos):
             break
         print("[ERRO] Ponto de destino inválido. Tente novamente.")
 
-    # Usaremos Dijkstra
+    # O algortimo utilizado foi o Dijkstra, para entender o motivo da escolhe consulte a sessão 'Comparação de Algoritmos' no README.md
     caminho, custo = dijkstra(mapa, origem, destino)
 
     if caminho:
@@ -88,22 +87,36 @@ def iniciar_simulacao_rota(G, pos):
     else:
         print(f"Não foi possível encontrar um caminho de {origem} para {destino}.")
 
+# MELHORIA: Função para analisar a importância dos pontos usando PageRank
+
 def analisar_pagerank(G, pos):
     """
-    Função placeholder para a análise de PageRank.
+    Calcula o PageRank para o grafo e exibe o resultado visualmente.
     """
     print("\n--- Análise de Importância (PageRank) ---")
-    print("Esta funcionalidade ainda não foi implementada.")
-    # Aqui, no futuro, chamaríamos a função de cálculo do PageRank
-    # e uma função de visualização apropriada.
-    pass # 'pass' é uma instrução que não faz nada, usada como placeholder.
+    print("Calculando a importância de cada ponto na rede...")
+
+    pagerank_scores = pagerank(mapa)
+
+    pontos_ordenados = sorted(pagerank_scores.items(), key=lambda item: item[1], reverse=True)
+    
+    print("\nPontos mais importantes da rede (maior score primeiro):")
+    for i, (ponto, score) in enumerate(pontos_ordenados):
+        print(f"{i+1}. {ponto}: {score:.4f}")
+
+    plotar_grafo_pagerank(
+        G, 
+        pos, 
+        pagerank_scores, 
+        "Visualização da Importância dos Pontos (PageRank)"
+    )
+    print('\n' + '/'*50)
 
 
 def main():
     """
     Função principal que executa o programa e gerencia o menu.
     """
-    # O grafo é criado apenas uma vez, no início.
 
     G = criar_grafo(mapa)
 
@@ -128,10 +141,7 @@ def main():
 
         elif escolha == 4:
             print("\nObrigado por usar o sistema. Até logo!")
-            break # Quebra o loop while e encerra o programa
+            break
 
-
-
-# Ponto de entrada do programa
 if __name__ == "__main__":
     main()
